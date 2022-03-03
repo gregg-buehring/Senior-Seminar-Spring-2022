@@ -4,38 +4,106 @@ using UnityEngine;
 
 public class Player_Movement3D : MonoBehaviour
 {
-    public int speed = 25;
-      public Rigidbody rb;
-      public int jumpForce = 20;
-      public int gravitymodifier = 1;
+      public int speed = 25;
+      private Rigidbody rb;
+      public float jumpForce = 350f;
+      private int gravitymodifier = 20;
       public bool touchingGround = true;
+      private bool jumped;
+      private bool isGround;
+      private float h;
+      public static bool IsInputEnabled;
+      public GameObject skateBoard;
+      [SerializeField] int zValue;
+
+
 
       void Start(){
         rb = GetComponent<Rigidbody>();
+        IsInputEnabled= true;
       }
 
       void Update() {
-      if((Input.GetKeyDown(KeyCode.W))&&(touchingGround)){
-            rb.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
-            touchingGround = false;
-      }
-      if(Input.GetKey(KeyCode.A)){
-            transform.position = new Vector3(transform.position.x-Time.deltaTime*speed,transform.position.y,transform.position.z);
-      }
-      if(Input.GetKey(KeyCode.S)){
-         if(!touchingGround){
-             gravitymodifier = 2;
-         }
-      }
-      if(Input.GetKey(KeyCode.D)){
-            transform.position = new Vector3(transform.position.x+Time.deltaTime*speed,transform.position.y,transform.position.z);
+            MovePlayer();
+            Playerjump();
       }
 
-      //gravity
-      if(!touchingGround){
-         transform.Translate(Physics.gravity * gravitymodifier * Time.deltaTime);
+      void MovePlayer(){
+
+            if((Input.GetKeyDown(KeyCode.W))&&(touchingGround)){
+                  rb.AddForce(Vector2.up * 5* jumpForce, ForceMode.Impulse);
+                  touchingGround = false;
+            }
+
+            else if(Input.GetKey(KeyCode.A)){
+                  transform.position = new Vector3(transform.position.x-Time.deltaTime*speed,transform.position.y,transform.position.z);
+            }
+
+
+            else if(Input.GetKey(KeyCode.D)){
+                  transform.position = new Vector3(transform.position.x+Time.deltaTime*speed,transform.position.y,transform.position.z);
+            }
       }
 
+      // Tim modify the walf function
+      // Update frame every 0.02 s (every fixed time we update)
+      void FixedUpdate (){
+
+            PlayerWalk();
+      }
+
+
+
+      void PlayerWalk(){
+             h = Input.GetAxisRaw("Horizontal"); // input from key left or right
+            if(h>0 && IsInputEnabled){
+                 rb.velocity = new Vector2(2*speed, rb.velocity.y);// the charactor moving to right(position speed), but continue hold the ypos
+                   ChangeDirection(zValue);
+            }
+            else if (h<0 && IsInputEnabled){
+                  rb.velocity = new Vector2(-2*speed, rb.velocity.y);
+                  ChangeDirection(-zValue);
+            }
+
+              else{
+                  rb.velocity = new Vector2(0f, rb.velocity.y);
+            }
+      }
+      // method to disable the input arrow keys when the player on the skateboard
+      public void BreakInput(){
+                IsInputEnabled = true;
+
+
+
+      }
+      // fucntion to make the player follow the skateboard
+      public void FollowSkate(){
+                  transform.position= Vector3.MoveTowards(transform.position, skateBoard.transform.position, 350f);
+
+
+
+
+
+      }
+
+      public void ChangeDirection(int direction){
+        //vector 3 is x, y and z
+        Vector3 tempScale = transform.localScale;
+        tempScale.z = direction;
+        transform.localScale = tempScale;
+      }
+
+      // function for jump movement after pressing the space key
+      void Playerjump(){
+            if(touchingGround){
+                  if(Input.GetKey(KeyCode.W) && (touchingGround)){
+
+                        jumped = true;
+                        rb.velocity= new Vector2(rb.velocity.x, jumpForce);
+                        touchingGround = false;
+
+                  }
+            }
       }
 
         //checks if player is touching the ground
@@ -45,4 +113,7 @@ public class Player_Movement3D : MonoBehaviour
             gravitymodifier = 1;
             }
       }
+
+      //
+
 }
