@@ -9,7 +9,7 @@ public class Player_Movement3D : MonoBehaviour
       private Rigidbody rb;
       public float jumpForce;
       private int gravitymodifier = 20;
-      public bool touchingGround = true;
+      public bool touchingGround;
       private bool jumped;
       private bool isGround;
       private float h;
@@ -19,6 +19,7 @@ public class Player_Movement3D : MonoBehaviour
       public GameObject groundCube1;
       public GameObject groundCube2;
       public GameObject groundCube3;
+      public GameObject groundCube4;
       public GameObject groundBottom;
       public bool touchBottom =false; 
       private float dist;
@@ -28,6 +29,9 @@ public class Player_Movement3D : MonoBehaviour
       FallRock fallRock;
       private float dist1;
       public bool go;
+      private bool push;
+      private Animator anim;
+      // public Transform GroundCheckPosition;
       
    
       
@@ -37,26 +41,33 @@ public class Player_Movement3D : MonoBehaviour
            rockBall = GameObject.FindGameObjectWithTag("Rock").GetComponent<RockBall>();
            rockRolling = GameObject.FindGameObjectWithTag("Rock").GetComponent<RotationRock>();
              IsInputEnabled= true;
-            rb = GetComponent<Rigidbody>();
             go=false;       
       }
 
       void Update() {
+            // // check if player touch the ground
+            // if(Physics2D.Raycast(GroundCheckPosition.position, Vector2.down, 50f)){
+            //       print("hello");
+            // }
             Playerjump();
-            TouchBottomLevel();
             HitRockFallZone();
-         
-
+            TouchingBottomGround();
+            JumpAnimation();
+            if(touchBottom){
+                  rockBall.SawMove();
+                  rockRolling.RockRolling();
+            }
       }
- 
       // Tim modify the walf function 
       // Update frame every 0.02 s (every fixed time we update)
       void FixedUpdate (){
             PlayerWalk();
             
       }
-
-      
+      void Awake(){
+            rb = GetComponent<Rigidbody>();
+            anim=GetComponent<Animator>();
+      }
 
       void PlayerWalk(){
              h = Input.GetAxisRaw("Horizontal"); // input from key left or right
@@ -72,6 +83,8 @@ public class Player_Movement3D : MonoBehaviour
               else{
                   rb.velocity = new Vector2(0f, rb.velocity.y);
             }
+            anim.SetInteger("Speed", Mathf.Abs((int)rb.velocity.x));
+
       }
       // method to disable the input arrow keys when the player on the skateboard 
       public void BreakInput(){
@@ -105,6 +118,11 @@ public class Player_Movement3D : MonoBehaviour
             transform.position= new Vector3(groundCube3.transform.position.x, transform.position.y, transform.position.z);
      
       }
+        public void FollowGroundCube4(){
+                  
+            transform.position= new Vector3(groundCube4.transform.position.x, transform.position.y, transform.position.z);
+     
+      }
 
 
       public void ChangeDirection(int direction){
@@ -113,43 +131,61 @@ public class Player_Movement3D : MonoBehaviour
         tempScale.z = direction;
         transform.localScale = tempScale;
       }
-      
-      // function for jump movement after pressing the space key
+       // function for jump movement after pressing the space key
       void Playerjump(){ 
             if(touchingGround){
                   if(Input.GetKey(KeyCode.Space) && (touchingGround)){
                        
                         jumped = true;
                         rb.velocity= new Vector2(rb.velocity.x, jumpForce);
-  
                   }
             }
       }
 
-      // check if the player touch the bottom of the level
+// Detect collision with floor
+        void OnCollisionEnter(Collision collision){
+        if(collision.gameObject.tag == "Ground" || collision.gameObject.tag == "BottomGround"){
+                 touchingGround=true;
+                 
+        }
+      
 
-     public void TouchBottomLevel(){
-           dist = Vector3.Distance(transform.position, groundBottom.transform.position);
-           if(dist <300){
-                 touchBottom=true;
-                  rockBall.SawMove();
-                  rockRolling.RockRolling();
+    }
+       // Detect collision exit with floor
+     void OnCollisionExit(Collision collision)
+     {
+         if (collision.gameObject.tag == "Ground" || collision.gameObject.tag == "BottomGround" )
+         {
+             touchingGround = false;
+         }
+     }
+     void JumpAnimation(){
+           if(touchingGround==true){
+                 anim.SetBool("Jump", false);
+           }
+           else{
+                 anim.SetBool("Jump", true);
            }
      }
+
+       // check if the player touch the 1st bottom ground
+      void TouchingBottomGround(){
+            float dist = Vector3.Distance(groundBottom.transform.position, transform.position);
+          
+        if(dist<=400){
+            touchBottom=true;
+            
+        }
+    }
      public void HitRockFallZone(){
            dist1 = Vector3.Distance(transform.position, fallRockZone.transform.position);
            if(dist1 <250){
                  fallRock.Fall();
-            //      seconds = (int)(timer%60);
-            //      fallRock.Fall();
-            //      if(seconds <3){
-            //             timer +=Time.deltaTime;
-            //             fallRock.ReturnPos();
-            //             fallRock.Fall();
-                 
+    
            
            }
      }
+     
    
      
 }
