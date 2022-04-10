@@ -2368,7 +2368,6 @@ GameObject:
   - component: {fileID: 5803301758984561933}
   - component: {fileID: 6270067649399143268}
   - component: {fileID: 6270067649399143269}
-  - component: {fileID: 6270067649399143271}
   - component: {fileID: 6270067649399143270}
   m_Layer: 0
   m_Name: player_s
@@ -2424,39 +2423,6 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9320051, y: 5.780381, z: 1.3250765}
   m_Center: {x: 0.033997446, y: 0.30494642, z: 0.12985301}
---- !u!114 &6270067649399143271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6612032604962881463}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 771bc312a13599848a477d4ea424a90b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  attackCooldown: 0.2
-  firePoint: {fileID: 6270067649496498515}
-  lazers:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  lives: 3
-  attack_damage: 1
-  isDead: 0
-  isAttacking: 0
-  GameOver: {fileID: 0}
-  attack: {fileID: 0}
-  injured: {fileID: 0}
-  death: {fileID: 0}
 --- !u!114 &6270067649399143270
 MonoBehaviour:
   m_ObjectHideFlags: 0
