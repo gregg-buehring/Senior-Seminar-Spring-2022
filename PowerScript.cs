@@ -7,7 +7,7 @@ public class PowerScript : MonoBehaviour
 {
     private Rigidbody rb;
     private int jumpForce=500;
-    private bool push;
+    public int push;
     private GameObject power;
     // Start is called before the first frame update
     void Start()
@@ -19,10 +19,10 @@ public class PowerScript : MonoBehaviour
      // hit the push power
      void OnCollisionEnter(Collision collision){
         if(collision.gameObject.tag == "PowerPush"){
-                  jumpForce = jumpForce*3;
-                 rb.velocity= new Vector2(rb.velocity.x, jumpForce);
-                 jumpForce =jumpForce/3;
-                  Destroy(collision.gameObject);
+            jumpForce = jumpForce*push; // increasing the jump force
+            rb.velocity= new Vector2(rb.velocity.x, jumpForce);
+            jumpForce =jumpForce/push; // make the jump force back to normal
+            Destroy(collision.gameObject);
         }
     }
 }
