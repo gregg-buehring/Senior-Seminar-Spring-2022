@@ -27,6 +27,14 @@ public class Bug_Attack : MonoBehaviour {
                     isDead = true;
                 }
             }
+            
+            //For Noel
+            if (GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Attack>().isAttacking) {
+                lives -= GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Attack>().attack_damage;
+                if (lives <= 0) {
+                    isDead = true;
+                }
+            }
         }
     }
 }

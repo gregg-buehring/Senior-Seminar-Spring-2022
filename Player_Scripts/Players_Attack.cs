@@ -21,10 +21,13 @@ public class Players_Attack : MonoBehaviour
     //Grab a reference to the player's movement script
     private Players_Movemets playerMovements;
 
-    private void Start() {
-        GameOver = GameObject.FindGameObjectWithTag("Game Over");
-        GameOver.SetActive(false);
-    }
+    //Keep bullet count
+    public int bulletCount = 0;
+
+    //private void Start() {
+    //    GameOver = GameObject.FindGameObjectWithTag("Game Over");
+    //    GameOver.SetActive(false);
+    //}
 
     // Awake is called before the first frame update / when the script is loaded
     private void Awake()

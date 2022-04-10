@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class Projectile : MonoBehaviour
@@ -10,15 +9,15 @@ public class Projectile : MonoBehaviour
     private bool hit;
     private float direction;
 
-    private BoxCollider2D boxCollider;
-//    private Animator animator;
+    private BoxCollider boxCollider;
+    private Animator animator;
 
 
     // Start is called before the first frame update
     private void Awake()
     {
-        boxCollider = GetComponent<BoxCollider2D>();
-//        animator = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider>();
+        animator = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -33,17 +32,17 @@ public class Projectile : MonoBehaviour
         if (lifeTime > 5) gameObject.SetActive(false);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision) {
+    private void OnTriggerEnter(Collider collision) {
         hit = true;
         boxCollider.enabled = false;
-//        animator.SetTrigger("explode");
+        animator.SetTrigger("Explode");
     }
 
-    private void OnCollisionEnter(Collision collision) {
-        hit = true;
-        boxCollider.enabled = false;
-        gameObject.SetActive(false);
-    }
+    //private void OnCollisionEnter(Collision collision) {
+    //    hit = true;
+    //    boxCollider.enabled = false;
+    //    gameObject.SetActive(false);
+    //}
 
     public void SetDirection(float _direction)
     {

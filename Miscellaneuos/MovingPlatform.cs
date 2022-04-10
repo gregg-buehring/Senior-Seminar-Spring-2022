@@ -22,7 +22,7 @@ public class MovingPlatform : MonoBehaviour {
             if (target == bounderies.Length) {
                 target = 0;
             }
-        }  
+        } 
 
         //MoveToward accepts (current posiiton of the object, position to which to move, speed)
         transform.position = Vector3.MoveTowards(transform.position, bounderies[target].position, speed * Time.deltaTime);
