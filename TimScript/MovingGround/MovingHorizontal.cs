@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MovingHorizontal : MonoBehaviour
 {
-    Player_Movement3D playerClass;
+    Player_MovementTim playerClass;
     public float amp;
     public float speed;
     public float xStart;
@@ -17,14 +17,11 @@ public class MovingHorizontal : MonoBehaviour
     public bool moveLeft;
     public bool isNotMove;
     public float yStart;
-    
-
     // Start is called before the first frame update
     void Start()
     {
-         playerClass = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_Movement3D>();
+         playerClass = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_MovementTim>();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -46,27 +43,23 @@ public class MovingHorizontal : MonoBehaviour
                 xPosition = xStart+Mathf.Sin(Time.time*speed)*amp;
             }
         }
-        
-
         transform.position = new Vector3(xPosition,yPosition , zPosition);
-    }
-   
-    
+    }    
     // check if the player colide the saw and die
      void SawCollision(){
-            dist = Vector3.Distance(transform.position, player.transform.position);
-            // check if the object is 'ground' 'saw' or 'spider' 
-            
-            if(!isGround){
-                if(dist<100){
-                    player.SetActive(false);
-                }
+        dist = Vector3.Distance(transform.position, player.transform.position);
+        // check if the object is 'ground' 'saw' or 'spider' 
+        
+        if(!isGround){
+            if(dist<100){
+                player.SetActive(false);
             }
-            else if(isCube){
-                if(dist<200){
-                   
-                    playerClass.FollowGroundCube();
-                }
+        }
+        else if(isCube){
+            if(dist<200){
+                
+                playerClass.FollowGroundCube3();
             }
+        }
       }
 }
