@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
-public class MovingHorizontal2 : MonoBehaviour
+using UnityEngine.UI;
+public class GroundMove : MonoBehaviour
 {
     Player_MovementTim playerClass;
     public float amp;
@@ -13,12 +13,13 @@ public class MovingHorizontal2 : MonoBehaviour
     public float yPosition;
     public float zPosition;
     public bool isGround;
-    public bool isCube;
     public bool moveLeft;
+    private Text GameOverText;
     // Start is called before the first frame update
     void Start()
     {
-         playerClass = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_MovementTim>();
+        GameOverText=GameObject.Find("GameOverText").GetComponent<Text>();
+        playerClass = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_MovementTim>();
     }
 
     // Update is called once per frame
@@ -36,22 +37,25 @@ public class MovingHorizontal2 : MonoBehaviour
         else{
             xPosition = xStart+Mathf.Sin(Time.time*speed)*amp;
         }
+
         transform.position = new Vector3(xPosition,yPosition , zPosition);
     }
+    
     // check if the player colide the saw and di
      void SawCollision(){
         dist = Vector3.Distance(transform.position, player.transform.position);
         // check if the object is 'ground' 'saw' or 'spider' 
         if(!isGround){
-            if(dist<100){
+            if(dist<80){
                 player.SetActive(false);
-                print("hel");
+                GameOverText.enabled=true; 
+                StartCoroutine(RestartGame());
             }
-        }
-        else if(isCube){
-            if(dist<100){
-                playerClass.FollowGroundCube2();
-            }
-        }
+        }  
+    }
+     // restart the game
+     IEnumerator RestartGame(){
+        yield return new WaitForSeconds(2f);
+        UnityEngine.SceneManagement.SceneManager.LoadScene("TimLevel");
     }
 }

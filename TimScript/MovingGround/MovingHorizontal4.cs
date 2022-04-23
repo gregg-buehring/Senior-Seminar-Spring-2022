@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MovingHorizontal2 : MonoBehaviour
+public class MovingHorizontal4 : MonoBehaviour
 {
     Player_MovementTim playerClass;
     public float amp;
@@ -20,7 +20,6 @@ public class MovingHorizontal2 : MonoBehaviour
     {
          playerClass = GameObject.FindGameObjectWithTag("Player").GetComponent<Player_MovementTim>();
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -36,8 +35,11 @@ public class MovingHorizontal2 : MonoBehaviour
         else{
             xPosition = xStart+Mathf.Sin(Time.time*speed)*amp;
         }
+
         transform.position = new Vector3(xPosition,yPosition , zPosition);
     }
+   
+    
     // check if the player colide the saw and di
      void SawCollision(){
         dist = Vector3.Distance(transform.position, player.transform.position);
@@ -45,12 +47,15 @@ public class MovingHorizontal2 : MonoBehaviour
         if(!isGround){
             if(dist<100){
                 player.SetActive(false);
-                print("hel");
+                
             }
         }
         else if(isCube){
             if(dist<100){
-                playerClass.FollowGroundCube2();
+                for(int i=0; i<10; i++){
+                    playerClass.FollowGroundCube4();
+                }
+                
             }
         }
     }
